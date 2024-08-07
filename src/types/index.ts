@@ -1,4 +1,4 @@
-import { ChangeEvent, FocusEvent } from 'react';
+import { ChangeEvent, FocusEvent } from "react";
 
 interface TextFieldProps {
   label: string;
@@ -43,7 +43,7 @@ const initialFormState: FormState = {
   monthlyCommission: 0,
   total_points: 0,
   commissionPerApp: 0,
-  currency: 'USD',
+  currency: "USD",
   errors: {
     PoliciesWithHRA: null,
     PoliciesWithoutHRA: null,

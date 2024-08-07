@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import TextField from "./TextField";
 import { initialFormState } from "../types";
@@ -19,6 +19,7 @@ function Calculator({ form, setForm, scroll }: any) {
     resetForm,
     touched,
     errors,
+    setFieldValue,
     values: {
       PoliciesWithHRA,
       PoliciesWithoutHRA,
@@ -76,14 +77,41 @@ function Calculator({ form, setForm, scroll }: any) {
   });
 
   const onReset = () => {
+    resetForm();
     setForm({
       ...initialFormState,
     });
-    resetForm();
+
+    if (selectedValue === "Outbound") {
+      setFieldValue("callConversion", 0);
+      setFieldValue("PoliciesWithoutHRA", 0);
+      setFieldValue("totalHRA", 0);
+      setFieldValue("totalVbcTransfers", 0);
+    }
   };
+
   function handleSegmentChange(value: string) {
     setSelectedValue(value);
+    resetForm();
+    setForm({
+      ...initialFormState,
+    });
+    if (value === "Outbound") {
+      setFieldValue("callConversion", 0);
+      setFieldValue("PoliciesWithoutHRA", 0);
+      setFieldValue("totalHRA", 0);
+      setFieldValue("totalVbcTransfers", 0);
+    }
   }
+
+  useEffect(() => {
+    if (selectedValue === "Outbound") {
+      setFieldValue("callConversion", 0);
+      setFieldValue("PoliciesWithoutHRA", 0);
+      setFieldValue("totalHRA", 0);
+      setFieldValue("totalVbcTransfers", 0);
+    }
+  }, [selectedValue, setFieldValue]);
 
   return (
     <div className="mx-auto max-w-2xl rounded-3xl ring-1 ring-gray-200 dark:ring-gray-700 sm:mt-13 lg:mx-0 lg:flex lg:max-w-none">
@@ -100,26 +128,71 @@ function Calculator({ form, setForm, scroll }: any) {
             onChange={handleSegmentChange}
           />
           <div className="grid grid-cols-1 gap-x-16 gap-y-5 sm:grid-cols-2 sm:gap-y-10">
-            <TextField
-              name="callConversion"
-              label="Call Conversion Rate (%):"
-              value={callConversion}
-              error={touched.callConversion && errors.callConversion}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="i.e. 12.25"
-            />
+            {selectedValue === "Inbound" && (
+              <>
+                <TextField
+                  name="callConversion"
+                  label="Call Conversion Rate (%):"
+                  value={callConversion}
+                  error={touched.callConversion && errors.callConversion}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="i.e. 12.25"
+                />
+                <TextField
+                  name="PoliciesWithHRA"
+                  label="Policies with HRA's:"
+                  value={PoliciesWithHRA}
+                  error={touched.PoliciesWithHRA && errors.PoliciesWithHRA}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="i.e. 5"
+                />
+                <TextField
+                  name="PoliciesWithoutHRA"
+                  label="Policies without HRA's:"
+                  value={PoliciesWithoutHRA}
+                  error={
+                    touched.PoliciesWithoutHRA && errors.PoliciesWithoutHRA
+                  }
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="i.e. 5"
+                />
+                <TextField
+                  name="totalHRA"
+                  label="Total HRA's:"
+                  value={totalHRA}
+                  error={touched.totalHRA && errors.totalHRA}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="i.e. 5"
+                />
+                <TextField
+                  name="totalVbcTransfers"
+                  label="Total VBC Transfers:"
+                  value={totalVbcTransfers}
+                  error={touched.totalVbcTransfers && errors.totalVbcTransfers}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="i.e. 5"
+                />
+              </>
+            )}
 
-            <TextField
-              name="PoliciesWithHRA"
-              label="Policies with HRA's:"
-              value={PoliciesWithHRA}
-              error={touched.PoliciesWithHRA && errors.PoliciesWithHRA}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="i.e. 5"
-            />
-
+            {selectedValue === "Outbound" && (
+              <>
+                <TextField
+                  name="PoliciesWithHRA"
+                  label="Total Policies:"
+                  value={PoliciesWithHRA}
+                  error={touched.PoliciesWithHRA && errors.PoliciesWithHRA}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="i.e. 15"
+                />
+              </>
+            )}
             <TextField
               name="placementRate"
               label="Placement Rate (%):"
@@ -129,17 +202,6 @@ function Calculator({ form, setForm, scroll }: any) {
               onBlur={handleBlur}
               placeholder="i.e. 85"
             />
-
-            <TextField
-              name="PoliciesWithoutHRA"
-              label="Policies without HRA's:"
-              value={PoliciesWithoutHRA}
-              error={touched.PoliciesWithoutHRA && errors.PoliciesWithoutHRA}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="i.e. 5"
-            />
-
             <TextField
               name="dailySalesAverage"
               label="Daily Sales Average:"
@@ -148,24 +210,6 @@ function Calculator({ form, setForm, scroll }: any) {
               onChange={handleChange}
               onBlur={handleBlur}
               placeholder="i.e. 2.5"
-            />
-            <TextField
-              name="totalHRA"
-              label="Total HRA's:"
-              value={totalHRA}
-              error={touched.totalHRA && errors.totalHRA}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="i.e. 5"
-            />
-            <TextField
-              name="totalVbcTransfers"
-              label="Total VBC Transfers:"
-              value={totalVbcTransfers}
-              error={touched.totalVbcTransfers && errors.totalVbcTransfers}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="i.e. 5"
             />
             <TextField
               name="totalReferralSales"

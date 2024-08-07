@@ -10,7 +10,7 @@ export default function NavBar() {
 
   return (
     <nav className="flex flex-col lg:flex-row justify-between items-center mx-auto w-full px-4 lg:px-0 pt-5">
-      <div className="flex items-center lg:mr-10">
+      <div className="flex items-center lg:ml-10">
         <img src="/logo-6.png" alt="Company Logo" style={{ height: "5rem" }} />
       </div>
       <div className="flex items-center lg:mx-10 mt-5 lg:mt-0">
