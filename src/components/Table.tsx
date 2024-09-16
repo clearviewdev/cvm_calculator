@@ -8,9 +8,10 @@ import { Item, PolicyKey } from "../types/Item";
 import TableItem from "./TableItem";
 import useInputModalStore from "../store/inputModalStore";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import EditableText from "./EditableText";
 
 function Table({ filterKey }: { filterKey: string }) {
-  const items = useComissionStore((state) => state.items);
+  const { items, fields } = useComissionStore((state) => state);
   const setEdit = useInputModalStore((state) => state.setEdit);
 
   const filterItems = items
@@ -25,13 +26,20 @@ function Table({ filterKey }: { filterKey: string }) {
     policyNames[filterKey as PolicyKey]
   );
 
+  const title =
+    fields?.find(
+      (field) => field.originalName === policyNames[filterKey as PolicyKey]
+    )?.name ?? "";
+
+  const filterFields = fields?.filter(
+    (field) => field?.originalName === policyNames[filterKey as PolicyKey]
+  );
+
   return (
     <>
       <div className="bg-white shadow-lg rounded-lg p-6 mb-4 w-11/12 mx-auto ring-1 ring-gray-200 dark:ring-gray-700 sm:mt-13 my-8 overflow-x-auto">
         <div className="flex justify-between items-center">
-          <h3 className="text-black text-xl font-bold tracking-tight text-start mb-1">
-            {policyTitles[filterKey as PolicyKey]}
-          </h3>
+          <EditableText id={filterFields?.[0]?._id} initialText={title} />
           {renderThreshold && (
             <button
               onClick={handleAddPolicy}

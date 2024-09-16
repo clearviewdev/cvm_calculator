@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import SettingsPage from './pages/Settings';
 import CalculatorPage from './pages/Calculator';
 import ProtectedRoute from './components/ProtectedRoute';
+import Loader from './components/Loader';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           }
         />
       </Routes>
+      <Loader />
     </BrowserRouter>
   );
 }

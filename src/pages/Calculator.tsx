@@ -1,29 +1,35 @@
-import { useLayoutEffect, useRef, useState } from "react";
-import Calculator from "../components/Calculator";
-import Outcome from "../components/Outcome";
-import { initialFormState } from "../types";
-import useComissionStore from "../store/comissionStore";
-import { getData } from "../api/ComissionAPI";
-import NavBar from "../components/NavBar";
-import Footer from "../components/Footer";
+import { useLayoutEffect, useRef, useState } from 'react';
+import Calculator from '../components/Calculator';
+import Outcome from '../components/Outcome';
+import { initialFormState } from '../types';
+import useComissionStore from '../store/comissionStore';
+import { getData } from '../api/ComissionAPI';
+import NavBar from '../components/NavBar';
+import Footer from '../components/Footer';
+import useLoaderStore from '../store/loaderStore';
 
 export default function CalculatorPage() {
   const [form, setForm] = useState(initialFormState);
   const { monthlyCommission, total_points, commissionPerApp } = form;
   const setItems = useComissionStore((state) => state.setItems);
+  const { setLoading, isLoading } = useLoaderStore((state) => state);
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const executeScroll = () =>
-    scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
+    scrollRef?.current?.scrollIntoView({ behavior: 'smooth' });
 
   useLayoutEffect(() => {
     fetchPolicy();
   }, []);
 
   async function fetchPolicy() {
+    setLoading(true);
     const items = await getData();
     setItems(items);
+    setLoading(false);
   }
+
+  if (isLoading) return null;
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-black">
@@ -32,7 +38,7 @@ export default function CalculatorPage() {
         <div className="mx-auto max-w-7xl px-4 lg:px-0">
           <div className="px-6 py-4 mb-8 rounded-lg">
             <h1
-              style={{ color: "#122d42" }}
+              style={{ color: '#122d42' }}
               className="text-4xl font-bold tracking-tight dark:text-white text-center"
             >
               Commission Rate Calculator

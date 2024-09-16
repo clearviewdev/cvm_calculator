@@ -16,12 +16,13 @@ This project is a commission calculator developed using Vite.js, React.js, TypeS
 - **Tailwind CSS**: A utility-first CSS framework for rapidly building custom designs.
 
 ## Usage
+
 1. Set the .env file correctly inside the root directory. (See .env.example file for correct format)
 2. Start the development server:
 
-    ```
-    npm run dev
-    ```
+   ```
+   npm run dev
+   ```
 
 3. Open your web browser and navigate to [http://localhost:5173](http://localhost:5173).
 

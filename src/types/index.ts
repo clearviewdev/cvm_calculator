@@ -1,15 +1,22 @@
-import { ChangeEvent, FocusEvent } from "react";
+import {
+  ChangeEvent,
+  FocusEvent,
+  KeyboardEvent,
+  KeyboardEventHandler,
+} from 'react';
 
 interface TextFieldProps {
-  label: string;
+  label?: string;
   name: string;
   value?: any;
   currency?: string;
   placeholder?: string;
   error?: any;
   type?: string;
+  autoFocus?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
   readOnly?: boolean;
 }
 
@@ -43,7 +50,7 @@ const initialFormState: FormState = {
   monthlyCommission: 0,
   total_points: 0,
   commissionPerApp: 0,
-  currency: "USD",
+  currency: 'USD',
   errors: {
     PoliciesWithHRA: null,
     PoliciesWithoutHRA: null,

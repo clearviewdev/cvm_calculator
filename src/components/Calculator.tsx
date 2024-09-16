@@ -9,7 +9,6 @@ import SegmentedControl from "../components/SegmentedControl";
 
 function Calculator({ form, setForm, scroll }: any) {
   const items = useComissionStore((state) => state.items);
-
   const [selectedValue, setSelectedValue] = useState("Inbound");
 
   const {
@@ -113,6 +112,13 @@ function Calculator({ form, setForm, scroll }: any) {
     }
   }, [selectedValue, setFieldValue]);
 
+  const getLabel = (originalName: string) => {
+    const item = items.find(
+      (item) => item.field?.originalName === originalName
+    );
+    return item ? item.field?.name : ""; // Fallback to "Unknown Label" if undefined
+  };
+
   return (
     <div className="mx-auto max-w-2xl rounded-3xl ring-1 ring-gray-200 dark:ring-gray-700 sm:mt-13 lg:mx-0 lg:flex lg:max-w-none">
       <div className="px-4 py-6 md:p-8 sm:p-10 lg:flex-auto items-center flex">
@@ -128,20 +134,12 @@ function Calculator({ form, setForm, scroll }: any) {
             onChange={handleSegmentChange}
           />
           <div className="grid grid-cols-1 gap-x-16 gap-y-5 sm:grid-cols-2 sm:gap-y-10">
+            {/* Render fields conditionally */}
             {selectedValue === "Inbound" && (
               <>
                 <TextField
-                  name="callConversion"
-                  label="Call Conversion Rate (%):"
-                  value={callConversion}
-                  error={touched.callConversion && errors.callConversion}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  placeholder="i.e. 12.25"
-                />
-                <TextField
                   name="PoliciesWithHRA"
-                  label="Policies with HRA's:"
+                  label="Policies with HRA's" // Dynamic label
                   value={PoliciesWithHRA}
                   error={touched.PoliciesWithHRA && errors.PoliciesWithHRA}
                   onChange={handleChange}
@@ -150,7 +148,7 @@ function Calculator({ form, setForm, scroll }: any) {
                 />
                 <TextField
                   name="PoliciesWithoutHRA"
-                  label="Policies without HRA's:"
+                  label="Policies without HRA's" // Dynamic label
                   value={PoliciesWithoutHRA}
                   error={
                     touched.PoliciesWithoutHRA && errors.PoliciesWithoutHRA
@@ -161,7 +159,7 @@ function Calculator({ form, setForm, scroll }: any) {
                 />
                 <TextField
                   name="totalHRA"
-                  label="Total HRA's:"
+                  label={getLabel("health_reimbursement_arrangements") || ""}
                   value={totalHRA}
                   error={touched.totalHRA && errors.totalHRA}
                   onChange={handleChange}
@@ -169,8 +167,17 @@ function Calculator({ form, setForm, scroll }: any) {
                   placeholder="i.e. 5"
                 />
                 <TextField
+                  name="callConversion"
+                  label={getLabel("inbound_call_conversion") || ""}
+                  value={callConversion}
+                  error={touched.callConversion && errors.callConversion}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  placeholder="i.e. 12.25"
+                />
+                <TextField
                   name="totalVbcTransfers"
-                  label="Total VBC Transfers:"
+                  label={getLabel("value_based_care") || ""}
                   value={totalVbcTransfers}
                   error={touched.totalVbcTransfers && errors.totalVbcTransfers}
                   onChange={handleChange}
@@ -180,11 +187,12 @@ function Calculator({ form, setForm, scroll }: any) {
               </>
             )}
 
+            {/* Outbound only displays the specified fields */}
             {selectedValue === "Outbound" && (
               <>
                 <TextField
                   name="PoliciesWithHRA"
-                  label="Total Policies:"
+                  label="Total Policies"
                   value={PoliciesWithHRA}
                   error={touched.PoliciesWithHRA && errors.PoliciesWithHRA}
                   onChange={handleChange}
@@ -193,9 +201,17 @@ function Calculator({ form, setForm, scroll }: any) {
                 />
               </>
             )}
+
+            {/* Common fields for both Inbound and Outbound with dynamic labels */}
             <TextField
               name="placementRate"
-              label="Placement Rate (%):"
+              label={
+                selectedValue === "Inbound"
+                  ? getLabel("inbound_placement_rate") ||
+                    "Inbound Placement Rate"
+                  : getLabel("outbound_placement_rate") ||
+                    "Outbound Placement Rate"
+              } // Dynamic label based on inbound/outbound
               value={placementRate}
               error={touched.placementRate && errors.placementRate}
               onChange={handleChange}
@@ -204,7 +220,13 @@ function Calculator({ form, setForm, scroll }: any) {
             />
             <TextField
               name="dailySalesAverage"
-              label="Daily Sales Average:"
+              label={
+                selectedValue === "Inbound"
+                  ? getLabel("inbound_daily_sales_average") ||
+                    "Inbound Daily Sales Average"
+                  : getLabel("outbound_daily_sales_average") ||
+                    "Outbound Daily Sales Average"
+              } // Dynamic label based on inbound/outbound
               value={dailySalesAverage}
               error={touched.dailySalesAverage && errors.dailySalesAverage}
               onChange={handleChange}
@@ -213,7 +235,7 @@ function Calculator({ form, setForm, scroll }: any) {
             />
             <TextField
               name="totalReferralSales"
-              label="Total Referral Sales:"
+              label={getLabel("referral_bonus") || "Referral Bonus"}
               value={totalReferralSales}
               error={touched.totalReferralSales && errors.totalReferralSales}
               onChange={handleChange}
