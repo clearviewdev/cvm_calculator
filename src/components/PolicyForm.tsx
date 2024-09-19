@@ -24,6 +24,9 @@ export default function PolicyForm({
   };
 
   const isThresholdRequired = thresholdRequired.includes(name);
+  const isPointScale =
+    policyNames.INBOUND_POINT_SCALE === name ||
+    policyNames.OUTBOUND_POINT_SCALE === name;
 
   const handleAddOrUpdate = async (values: Item) => {
     if (!!editId) {
@@ -73,9 +76,7 @@ export default function PolicyForm({
             {isThresholdRequired && (
               <div className="mb-4">
                 <TextField
-                  label={
-                    policyNames.POINT_SCALE === name ? 'Points' : 'Threshold'
-                  }
+                  label={isPointScale ? 'Points' : 'Threshold'}
                   name="threshold"
                   value={values.threshold}
                   onChange={handleChange}
@@ -86,11 +87,7 @@ export default function PolicyForm({
 
             <div className="mb-4">
               <TextField
-                label={
-                  policyNames.POINT_SCALE === name
-                    ? 'Commission (w/ HRA)'
-                    : 'Points'
-                }
+                label={isPointScale ? 'Commission (w/ HRA)' : 'Points'}
                 name="points"
                 value={values.points}
                 onChange={handleChange}
@@ -98,7 +95,7 @@ export default function PolicyForm({
               />
             </div>
 
-            {name === policyNames.POINT_SCALE && (
+            {isPointScale && (
               <div className="mb-4">
                 <TextField
                   label="Commission (w/o HRA)"

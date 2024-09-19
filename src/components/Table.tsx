@@ -1,8 +1,4 @@
-import {
-  policyNames,
-  policyTitles,
-  thresholdRequired,
-} from "../constants/policyData";
+import { policyNames, thresholdRequired } from "../constants/policyData";
 import useComissionStore from "../store/comissionStore";
 import { Item, PolicyKey } from "../types/Item";
 import TableItem from "./TableItem";
@@ -35,17 +31,25 @@ function Table({ filterKey }: { filterKey: string }) {
     (field) => field?.originalName === policyNames[filterKey as PolicyKey]
   );
 
+  const isPointScale =
+    policyNames.INBOUND_POINT_SCALE === policyNames[filterKey as PolicyKey] ||
+    policyNames.OUTBOUND_POINT_SCALE === policyNames[filterKey as PolicyKey];
+
   return (
     <>
       <div className="bg-white shadow-lg rounded-lg p-6 mb-4 w-11/12 mx-auto ring-1 ring-gray-200 dark:ring-gray-700 sm:mt-13 my-8 overflow-x-auto">
         <div className="flex justify-between items-center">
-          <EditableText id={filterFields?.[0]?._id} initialText={title} />
+          <EditableText
+            id={filterFields?.[0]?._id}
+            initialText={title}
+            isPointScale={isPointScale}
+          />
           {renderThreshold && (
             <button
               onClick={handleAddPolicy}
               className="flex items-center justify-center bg-white px-4 py-2 rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105"
             >
-              <PlusCircleIcon width={35} className="ml-1 text-blue-600" />
+              <PlusCircleIcon width={30} className="ml-1 text-blue-600" />
             </button>
           )}
         </div>
@@ -56,22 +60,16 @@ function Table({ filterKey }: { filterKey: string }) {
                 {/* Conditionally render column headers */}
                 {renderThreshold && (
                   <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
-                    {policyNames[filterKey as PolicyKey] === "point_scale"
-                      ? "Points"
-                      : "Threshold"}
+                    {isPointScale ? "Points" : "Threshold"}
                   </th>
                 )}
                 <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
-                  {policyNames[filterKey as PolicyKey] === "point_scale"
-                    ? "Commission (w/ HRA)"
-                    : "Points"}
+                  {isPointScale ? "Commission (w/ HRA)" : "Points"}
                 </th>
 
-                {policyNames[filterKey as PolicyKey] === "point_scale" && (
+                {isPointScale && (
                   <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
-                    {policyNames[filterKey as PolicyKey] === "point_scale"
-                      ? "Commission (w/o HRA)"
-                      : "Points"}
+                    {isPointScale ? "Commission (w/o HRA)" : "Points"}
                   </th>
                 )}
                 <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">

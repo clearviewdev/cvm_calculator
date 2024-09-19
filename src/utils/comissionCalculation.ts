@@ -1,5 +1,5 @@
-import { policyNames } from '../constants/policyData';
-import { Item } from '../types/Item';
+import { policyNames } from "../constants/policyData";
+import { Item } from "../types/Item";
 
 export function calculateOutcome({
   PoliciesWithHRA,
@@ -10,6 +10,7 @@ export function calculateOutcome({
   callConversion,
   placementRate,
   dailySalesAverage,
+  totalSaves,
   items,
   isInbound,
 }: any) {
@@ -17,18 +18,23 @@ export function calculateOutcome({
     +callConversion,
     +placementRate,
     +dailySalesAverage,
+    +totalSaves,
     items,
     isInbound
   );
   const commissionPerApp = getPoint({
     value: total_points,
-    name: policyNames.POINT_SCALE,
+    name: isInbound
+      ? policyNames.INBOUND_POINT_SCALE
+      : policyNames.OUTBOUND_POINT_SCALE,
     items,
   });
 
   const nonHraCommission = getPoint({
     value: total_points,
-    name: policyNames.POINT_SCALE,
+    name: isInbound
+      ? policyNames.INBOUND_POINT_SCALE
+      : policyNames.OUTBOUND_POINT_SCALE,
     items,
     nonHra: true,
   });
@@ -51,6 +57,7 @@ function getTotalPoints(
   callConversion: number,
   placementRate: number,
   dailySalesAverage: number,
+  totalSaves: number,
   items: Item[],
   isInbound: boolean
 ) {
@@ -71,11 +78,18 @@ function getTotalPoints(
       : policyNames.OUTBOUND_PLACEMENT_RATE,
     items,
   });
+
   totalPoints += getPoint({
     value: dailySalesAverage,
     name: isInbound
       ? policyNames.INBOUND_DAILY_SALES
       : policyNames.OUTBOUND_DAILY_SALES,
+    items,
+  });
+
+  totalPoints += getPoint({
+    value: totalSaves,
+    name: isInbound ? policyNames.INBOUND_SAVES : policyNames.OUTBOUND_SAVES,
     items,
   });
 
@@ -88,13 +102,17 @@ function getPoint({ value, name, items, nonHra }: any) {
     return +item?.points!;
   }
   const data = items
-    .filter((item: Item) => item.name === name)
+    .filter((item: Item) => !!item.field?.name && item.name === name)
     .sort((a: Item, b: Item) => +b.threshold! - +a.threshold!);
   // Iterate through the criteria
   for (const criterion of data) {
     // Check if the value is within the current threshold
     if (value >= +criterion.threshold!) {
-      if (name === policyNames.POINT_SCALE && nonHra) {
+      if (
+        (policyNames.INBOUND_POINT_SCALE === name ||
+          policyNames.OUTBOUND_POINT_SCALE === name) &&
+        nonHra
+      ) {
         return +criterion.nonHraPoints!;
       }
       return +criterion.points!; // Exit the loop since we found the first matching range

@@ -3,7 +3,7 @@ import {
   FocusEvent,
   KeyboardEvent,
   KeyboardEventHandler,
-} from 'react';
+} from "react";
 
 interface TextFieldProps {
   label?: string;
@@ -36,6 +36,7 @@ type Errors = {
   callConversion?: string | null;
   placementRate?: string | null;
   dailySalesAverage?: string | null;
+  totalSaves?: string | null;
 };
 
 interface FormState {
@@ -50,13 +51,14 @@ const initialFormState: FormState = {
   monthlyCommission: 0,
   total_points: 0,
   commissionPerApp: 0,
-  currency: 'USD',
+  currency: "USD",
   errors: {
     PoliciesWithHRA: null,
     PoliciesWithoutHRA: null,
     totalHRA: null,
     totalVbcTransfers: null,
     totalReferralSales: null,
+    totalSaves: null,
   },
 };
 

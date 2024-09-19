@@ -1,5 +1,5 @@
-import { useRef, useEffect, useCallback } from 'react';
-import useInputModalStore from '../store/inputModalStore';
+import { useRef, useEffect, useCallback } from "react";
+import useInputModalStore from "../store/inputModalStore";
 
 const Modal = ({ children }: any) => {
   const modalRef = useRef(null);
@@ -13,7 +13,7 @@ const Modal = ({ children }: any) => {
 
   const keyPress = useCallback(
     (e: any) => {
-      if (e.key === 'Escape' && showModal) {
+      if (e.key === "Escape" && showModal) {
         completeEdit();
       }
     },
@@ -21,19 +21,17 @@ const Modal = ({ children }: any) => {
   );
 
   useEffect(() => {
-    document.addEventListener('keydown', keyPress);
-    return () => document.removeEventListener('keydown', keyPress);
+    document.addEventListener("keydown", keyPress);
+    return () => document.removeEventListener("keydown", keyPress);
   }, [keyPress]);
   return (
-    // backdrop
     <div
       onClick={closeModal}
       className={`
         fixed inset-0 flex justify-center items-center transition-colors
-        ${showModal ? 'visible bg-black/20' : 'invisible'}
+        ${showModal ? "visible bg-black/20" : "invisible"}
       `}
     >
-      {/* modal */}
       <div onClick={(e) => e.stopPropagation()}>{children}</div>
     </div>
   );

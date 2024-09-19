@@ -8,7 +8,10 @@ export const policyNames = {
   HRA: "health_reimbursement_arrangements",
   VBC: "value_based_care",
   REFERRAL_BONUS: "referral_bonus",
-  POINT_SCALE: "point_scale",
+  OUTBOUND_POINT_SCALE: "outbound_point_scale",
+  INBOUND_POINT_SCALE: "inbound_point_scale",
+  INBOUND_SAVES: "inbound_saves",
+  OUTBOUND_SAVES: "outbound_saves",
 };
 
 export const policyTitles = {
@@ -28,31 +31,39 @@ export const inboundColumn = [
   "INBOUND_CALL_CONVERSION",
   "INBOUND_PLACEMENT_RATE",
   "INBOUND_DAILY_SALES",
+  "INBOUND_SAVES",
+  "INBOUND_POINT_SCALE",
 ];
 
 export const outboundColumn = [
   "OUTBOUND_CALL_CONVERSION",
   "OUTBOUND_PLACEMENT_RATE",
   "OUTBOUND_DAILY_SALES",
+  "OUTBOUND_SAVES",
+  "OUTBOUND_POINT_SCALE",
 ];
 
-export const restColumn = ["HRA", "VBC", "REFERRAL_BONUS", "POINT_SCALE"];
+export const restColumn = ["HRA", "VBC", "REFERRAL_BONUS"];
 
 export const showDollarSign = [
   policyNames.HRA,
   policyNames.VBC,
   policyNames.REFERRAL_BONUS,
-  policyNames.POINT_SCALE,
+  policyNames.INBOUND_POINT_SCALE,
+  policyNames.OUTBOUND_POINT_SCALE,
 ];
 
 export const thresholdRequired = [
   policyNames.INBOUND_CALL_CONVERSION,
   policyNames.INBOUND_PLACEMENT_RATE,
   policyNames.INBOUND_DAILY_SALES,
+  policyNames.INBOUND_POINT_SCALE,
+  policyNames.INBOUND_SAVES,
   policyNames.OUTBOUND_CALL_CONVERSION,
   policyNames.OUTBOUND_PLACEMENT_RATE,
   policyNames.OUTBOUND_DAILY_SALES,
-  policyNames.POINT_SCALE,
+  policyNames.OUTBOUND_POINT_SCALE,
+  policyNames.OUTBOUND_SAVES,
 ];
 
 export const showPercentage = [

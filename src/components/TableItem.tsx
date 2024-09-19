@@ -1,14 +1,14 @@
-import { deleteItem } from "../api/ComissionAPI";
+import { deleteItem } from '../api/ComissionAPI';
 import {
   policyNames,
   showDollarSign,
   showPercentage,
   thresholdRequired,
-} from "../constants/policyData";
-import useComissionStore from "../store/comissionStore";
-import useInputModalStore from "../store/inputModalStore";
-import { Item } from "../types/Item";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
+} from '../constants/policyData';
+import useComissionStore from '../store/comissionStore';
+import useInputModalStore from '../store/inputModalStore';
+import { Item } from '../types/Item';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid';
 
 export default function TableItem({
   name,
@@ -25,6 +25,10 @@ export default function TableItem({
     removeItem(id);
   }
 
+  const isPointScale =
+    policyNames.INBOUND_POINT_SCALE === name ||
+    policyNames.OUTBOUND_POINT_SCALE === name;
+
   return (
     <tr className="border-b border-gray-200 hover:bg-gray-100">
       {/* Render threshold only if name is not one of the specified values */}
@@ -34,18 +38,18 @@ export default function TableItem({
             ? showPercentage.includes(name!)
               ? `${threshold}%`
               : threshold
-            : "N/A"}
+            : 'N/A'}
         </td>
       )}
       <td className="px-3 md:px-6 py-4 whitespace-nowrap text-center">
         {showDollarSign.includes(name!)
-          ? `$${points || "N/A"}`
-          : points || "N/A"}
+          ? `$${points || 'N/A'}`
+          : points || 'N/A'}
       </td>
 
-      {policyNames.POINT_SCALE === name! && (
+      {isPointScale && (
         <td className="px-3 md:px-6 py-4 whitespace-nowrap text-center">
-          {nonHraPoints ? `$${nonHraPoints}` : "N/A"}
+          {nonHraPoints ? `$${nonHraPoints}` : 'N/A'}
         </td>
       )}
 
